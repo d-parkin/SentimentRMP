@@ -2,8 +2,9 @@ import ratemyprofessor
 import datetime
 import csv
 
+professor_name = "Jucheol Moon"
 professor = ratemyprofessor.get_professor_by_school_and_name(
-    ratemyprofessor.get_school_by_name("California State University Long Beach"), "Jucheol Moon")
+    ratemyprofessor.get_school_by_name("California State University Long Beach"), professor_name)
 if professor is not None:
     # Instructor.csv
     id = 0
@@ -39,6 +40,8 @@ if professor is not None:
 
 
     headers = ['ID', 'Quality', 'Date', 'Difficulty', 'Course', 'For Credit', 'Attendance Mandatory', 'Would Take Again', 'Grade', 'Review', 'Helpful(Pos)', 'Helpful(Neg)']
+    # rows = list(zip([instructor_id] * len(quality), quality, date, difficulty, course, credit, attendance, take_again, grade, review, helpful_pos, helpful_neg))
+
     rows = [instructor_id, quality, date, difficulty, course, credit, attendance, take_again, grade, review, helpful_pos, helpful_neg]
     with open('Rating.csv', mode='w', newline='') as file:
         writer = csv.writer(file)
@@ -48,9 +51,6 @@ if professor is not None:
 
 
 
-    
-    # attributes of professor
-    # print(dir(professor))
     
    
 
