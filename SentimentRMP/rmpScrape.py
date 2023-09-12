@@ -1,55 +1,72 @@
 import ratemyprofessor
-import datetime
-import csv
+import mysql.connector
+from mysql.connector import Error
 
-professor_name = "Jucheol Moon"
-professor = ratemyprofessor.get_professor_by_school_and_name(
-    ratemyprofessor.get_school_by_name("California State University Long Beach"), professor_name)
-if professor is not None:
-    # Instructor.csv
-    id = 0
-    department = professor.department
-    name = professor.name
-    num_ratings = professor.num_ratings
+# Function to insert data into the Instructor MySQL table
+def insert_instructor(connection, department, name, num_ratings):
+    try:
+        cursor = connection.cursor()
+        sql = "INSERT INTO Instructor (Department, Name, NumRatings) VALUES (%s, %s, %s)"
+        val = (department, name, num_ratings)
+        cursor.execute(sql, val)
+        connection.commit()
+        return cursor.lastrowid  # Get the last inserted ID
+    except Error as e:
+        print(f"Error inserting data into Instructor: {e}")
+        return None
 
-    headers = ['ID', 'Department', 'Instructor Name', '# Ratings']
-    rows = [id, department, name, num_ratings]
-    with open('Instructor.csv', mode='w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(headers)
-        writer.writerow(rows)
-    file.close()
+# Function to insert data into the Rating MySQL table
+def insert_rating(connection, instructor_id, quality, date, difficulty, course, credit, attendance, take_again, grade, review, helpful_pos, helpful_neg):
+    try:
+        cursor = connection.cursor()
+        sql = "INSERT INTO Rating (InstructorID, Quality, Date, Difficulty, Course, ForCredit, AttendanceMandatory, WouldTakeAgain, Grade, Review, HelpfulPos, HelpfulNeg) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        val = (instructor_id, quality, date, difficulty, course, credit, attendance, take_again, grade, review, helpful_pos, helpful_neg)
+        cursor.execute(sql, val)
+        connection.commit()
+    except Error as e:
+        print(f"Error inserting data into Rating: {e}")
 
-    # Rating.csv
-    instructor_id = 0
-    ratings = professor.get_ratings()
-    quality, date, difficulty, course, credit, attendance, take_again, grade, review, helpful_pos, helpful_neg = [], [], [], [], [], [], [], [], [], [], []
-    for i in range(len(ratings)):
-        quality.append(ratings[i].rating)
-        formatted_date = ratings[i].date.strftime('%Y-%m-%d %H:%M:%S')
-        date.append(formatted_date)
-        difficulty.append(ratings[i].difficulty)
-        course.append(ratings[i].class_name)
-        credit.append(ratings[i].credit)
-        attendance.append(ratings[i].attendance_mandatory)
-        take_again.append(ratings[i].take_again)
-        grade.append(ratings[i].grade)
-        review.append(ratings[i].comment)
-        helpful_pos.append(ratings[i].thumbs_up)
-        helpful_neg.append(ratings[i].thumbs_down)
+# MySQL database configuration
+db_config = {
+    "host": "192.168.1.98",
+    "user": "root",
+    "password": "zip@zap",
+    "database": "sentimentrmp",
+}
 
+try:
+    connection = mysql.connector.connect(**db_config)
 
-    headers = ['ID', 'Quality', 'Date', 'Difficulty', 'Course', 'For Credit', 'Attendance Mandatory', 'Would Take Again', 'Grade', 'Review', 'Helpful(Pos)', 'Helpful(Neg)']
-    with open('Rating.csv', mode='w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(headers)
-        # Iterate through the lists and create a new row for each element
-        for row in zip([instructor_id] * len(quality), quality, date, difficulty, course, credit, attendance, take_again, grade, review, helpful_pos, helpful_neg):
-            writer.writerow(row)
-    file.close()
+    professor_name = "Jucheol Moon"
+    professor = ratemyprofessor.get_professor_by_school_and_name(
+        ratemyprofessor.get_school_by_name("California State University Long Beach"), professor_name)
 
+    if professor is not None:
+        # Insert instructor data into MySQL database
+        instructor_id = insert_instructor(connection, professor.department, professor.name, professor.num_ratings)
 
+        if instructor_id is not None:
+            # Insert rating data into MySQL database
+            ratings = professor.get_ratings()
+            for rating in ratings:
+                insert_rating(
+                    connection,
+                    instructor_id,
+                    rating.rating,
+                    rating.date.strftime('%Y-%m-%d %H:%M:%S'),
+                    rating.difficulty,
+                    rating.class_name,
+                    rating.credit,
+                    rating.attendance_mandatory,
+                    rating.take_again,
+                    rating.grade,
+                    rating.comment,
+                    rating.thumbs_up,
+                    rating.thumbs_down
+                )
 
-    
-   
-
+except Error as e:
+    print(f"Error connecting to MySQL: {e}")
+finally:
+    if connection.is_connected():
+        connection.close()
