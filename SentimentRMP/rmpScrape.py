@@ -40,13 +40,12 @@ if professor is not None:
 
 
     headers = ['ID', 'Quality', 'Date', 'Difficulty', 'Course', 'For Credit', 'Attendance Mandatory', 'Would Take Again', 'Grade', 'Review', 'Helpful(Pos)', 'Helpful(Neg)']
-    # rows = list(zip([instructor_id] * len(quality), quality, date, difficulty, course, credit, attendance, take_again, grade, review, helpful_pos, helpful_neg))
-
-    rows = [instructor_id, quality, date, difficulty, course, credit, attendance, take_again, grade, review, helpful_pos, helpful_neg]
     with open('Rating.csv', mode='w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(headers)
-        writer.writerow(rows)
+        # Iterate through the lists and create a new row for each element
+        for row in zip([instructor_id] * len(quality), quality, date, difficulty, course, credit, attendance, take_again, grade, review, helpful_pos, helpful_neg):
+            writer.writerow(row)
     file.close()
 
 
