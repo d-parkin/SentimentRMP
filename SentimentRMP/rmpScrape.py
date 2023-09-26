@@ -37,33 +37,37 @@ db_config = {
 try:
     connection = mysql.connector.connect(**db_config)
 
-    professor_name = "Jucheol Moon"
-    professor = ratemyprofessor.get_professor_by_school_and_name(
-        ratemyprofessor.get_school_by_name("California State University Long Beach"), professor_name)
+    school_name = "California State University Long Beach"
+    school = ratemyprofessor.get_school_by_name(school_name)
 
-    if professor is not None:
-        # Insert instructor data into MySQL database
-        instructor_id = insert_instructor(connection, professor.department, professor.name, professor.num_ratings)
+    if school is not None:
+        # Iterate through professors with different names
+        for professor_name in ["Jucheol Moon", "Lawrence Lan", "Kyle Mori"]:
+            professor = ratemyprofessor.get_professor_by_school_and_name(school, professor_name)
 
-        if instructor_id is not None:
-            # Insert rating data into MySQL database
-            ratings = professor.get_ratings()
-            for rating in ratings:
-                insert_rating(
-                    connection,
-                    instructor_id,
-                    rating.rating,
-                    rating.date.strftime('%Y-%m-%d %H:%M:%S'),
-                    rating.difficulty,
-                    rating.class_name,
-                    rating.credit,
-                    rating.attendance_mandatory,
-                    rating.take_again,
-                    rating.grade,
-                    rating.comment,
-                    rating.thumbs_up,
-                    rating.thumbs_down
-                )
+            if professor is not None:
+                # Insert instructor data into MySQL database
+                instructor_id = insert_instructor(connection, professor.department, professor.name, professor.num_ratings)
+
+                if instructor_id is not None:
+                    # Insert rating data into MySQL database
+                    ratings = professor.get_ratings()
+                    for rating in ratings:
+                        insert_rating(
+                            connection,
+                            instructor_id,
+                            rating.rating,
+                            rating.date.strftime('%Y-%m-%d %H:%M:%S'),
+                            rating.difficulty,
+                            rating.class_name,
+                            rating.credit,
+                            rating.attendance_mandatory,
+                            rating.take_again,
+                            rating.grade,
+                            rating.comment,
+                            rating.thumbs_up,
+                            rating.thumbs_down
+                        )
 
 except Error as e:
     print(f"Error connecting to MySQL: {e}")
