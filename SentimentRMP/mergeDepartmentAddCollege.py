@@ -24,14 +24,22 @@ def addCollege(csv):
     df['College'] = ''
 
     for index, row in df.iterrows():
-        if row['Department'] in ['Art', 'Dance', 'Design', 'Film and Electronic Arts', 'Music or "Theatre Arts', 'Theater', 'Film', 'Music']:
+        if row['Department'] in ['Art', 'Dance', 'Design', 'Film and Electronic Arts', 'Music or "Theatre Arts', 'Theater', 'Film', 'Music', 'Art History']:
              df.at[index, 'College'] = 'College of the Arts'
-        if row['Department'] in ['Accounting', 'Finance', 'Information Systems', 'International Business', 'Management and Human Resource Management', 'Marketing']:
+        if row['Department'] in ['Accounting', 'Finance', 'Information Systems', 'International Business', 'Management and Human Resource Management', 'Marketing', 'Human Resources Management']:
              df.at[index, 'College'] = 'College of Business'
-        if row['Department'] in ['Advanced Studies in Education and Counseling', 'Educational Leadership', 'Liberal Studies', 'Single Subject Teacher Education', 'Teacher Education']:
+        if row['Department'] in ['Advanced Studies in Education and Counseling', 'Educational Leadership', 'Liberal Studies', 'Single Subject Teacher Education', 'Teacher Education', 'Educational Psychology', 'Education']:
              df.at[index, 'College'] = 'College of Education'
-        if row['Department'] in ['Biomedical Engineering', 'Chemical Engineering', 'Civil Engineering and Construction Engineering Management', 'Computer Engineering & Computer Science', 'Teacher Education']:
+        if row['Department'] in ['Biomedical Engineering', 'Chemical Engineering', 'Civil Engineering and Construction Engineering Management', 'Computer Engineering & Computer Science', 'Civil Engineering', 'Construction', 'Electrical Engineering', 'Mechanical Engineering', 'Mech. & Aerospace Engineering']:
              df.at[index, 'College'] = 'College of Engineering'
+        if row['Department'] in ['Child Development', 'Child & Family Studies', 'Consumer Affairs', 'Criminal Justice', 'Health & Human Services', 'Family  Consumer Science', 'Fashion', 'Food Science', 'Gerontology', 'Health Care Administration', 'Health Science', 'Hospitality', 'Kinesiology', 'Military Science', 'Nursing', 'Nutrition', 'Physical Ed', 'Public Policy', 'Public Administration', 'Recreation', 'Social Work']:
+             df.at[index, 'College'] = 'College of Health and Human Services'
+        if row['Department'] in ['African Studies', 'African-American Studies', 'American Indian Studies', 'American Studies', 'Asian American Studies', 'Asian Studies', 'Anthropology', 'Chicano Studies', 'Chicano Latino Studies', 'Chinese', 'Classics', 'Communication', 'Communication Studies', 'Comparative Literature', 'Literature', 'Economics', 'English', 'Environmental Science', 'French', 'Geography', 'German', 'History', 'Human Development', 'International Studies', 'Italian', 'Japanese', 'Journalism', 'Linguistics', 'Philosophy', 'Political Science', 'Psychology', 'Religious Studies', 'Russian', 'Sociology', 'Spanish', 'Translation', "Women's Studies", 'Health Science/Womens, Gender & Sexuality Studies']:
+             df.at[index, 'College'] = 'College of Liberal Arts'
+        if row['Department'] in ['Biological Sciences', 'Chemistry', 'Biochemistry', 'Geology', 'Mathematics', 'Physics', 'Physics & Astronomy', 'Astronomy', 'Science Education']:
+             df.at[index, 'College'] = 'College of Natural Sciences and Mathematics'
+
+
 
     df_list = df.columns.tolist()
     df_list.insert(3, 'College')
