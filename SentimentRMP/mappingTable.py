@@ -1,3 +1,5 @@
+# creates jaro winkler mapping table
+
 import pandas as pd
 from itertools import combinations
 import jaro

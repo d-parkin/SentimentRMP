@@ -1,3 +1,5 @@
+# scrapes all professor names from CSULB from RMP
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 import time

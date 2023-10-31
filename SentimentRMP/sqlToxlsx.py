@@ -1,3 +1,5 @@
+# extracts mysql table to xlsx
+
 import pandas as pd
 from sqlalchemy import create_engine
 

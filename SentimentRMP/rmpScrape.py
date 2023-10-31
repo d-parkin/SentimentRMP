@@ -1,3 +1,5 @@
+#__init__.py is the scraper
+
 import ratemyprofessor
 import mysql.connector
 from mysql.connector import Error

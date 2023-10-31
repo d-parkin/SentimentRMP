@@ -1,3 +1,5 @@
+# drop duplicates from combined jaro winkler and levenschtein mapping tables
+
 import pandas as pd
 
 # Load the CSV file into a DataFrame
