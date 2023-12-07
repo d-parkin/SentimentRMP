@@ -2,11 +2,10 @@
 
 import pandas as pd
 
-df_initial = pd.read_csv(r'C:\Users\david\OneDrive\Documents\GitHub\SentimentRMP\SentimentRMP\FINALTablewithDepartmentCollege.csv')
+df_initial = pd.read_csv(r'C:\Users\parki\Downloads\SentimentRMP\SentimentRMP\FINALTablewithDepartmentCollege.csv')
 
-for index, row in df_initial.iterrows():
-    if row["Department"] == "Computer Science" or "Computer Engineering amp Computer Science" or "Computer Engineering & Computer Science" or "Computer Engineering  Computer Science" or "Computer Engineering" or "Computer Science" or "Computer Engineering amp Computer Science" or "Computer Engineering & Computer Science" or "Computer Engineering  Computer Science" or "Computer Engineering":
-        df_initial.at[index, "Department"] = "Computer Engineering Computer Science"
+df_initial.loc[df_initial["Department"].isin(["Computer Science", "Computer Engineering amp Computer Science", "Computer Engineering & Computer Science", "Computer Engineering  Computer Science", "Computer Engineering"]) | df_initial["Course"].str.startswith("CE"), "Department"] = "Computer Engineering Computer Science"
+
 
 # produce new csv
 df_initial.to_csv('FINALcombinedCECS.csv', index=False)
